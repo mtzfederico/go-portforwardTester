@@ -1,0 +1,27 @@
+/* Light mode */
+@media (prefers-color-scheme: light) {
+    body {
+        background-color: white;
+        color: black;
+        /*font-family:  'Consolas', 'Lexend Deca', 'Ubuntu Mono';
+        font-size: 24px;*/
+    }
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: black;
+        color: white;
+        /*font-family:  'Consolas', 'Lexend Deca', 'Ubuntu Mono';
+        font-size: 24px;*/
+    }
+}
+
+/* The alert message box */
+.alert {
+    padding: 20px;
+    background-color: #f44336; /* Red */
+    color: white;
+    margin-bottom: 15px;
+  }
