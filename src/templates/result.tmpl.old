@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<html>
+<head>
+	<title>Port Forward Tester Built in GO</title>
+	<link rel="stylesheet" type="text/css" href="/style.css">
+</head>
+<body>
+	<h1>Port Forward Tester Built in GO</h1>
+	<h5>Your IP: {{.ClientIP}}</h5>
+
+	{{if .ErrorMessage}}
+		<div class="alert">
+  			<strong>Error:</strong> {{.ErrorMessage}}
+		</div>
+	{{end}}
+
+	<form action="/" method="post">
+	<label for="host">Host:</label><br>
+		<input type="text" id="host" name="host" placeholder="domain or ip" value="{{.Host}}">
+		<br>
+		<label for="lname">Ports:</label>
+		<br>
+		<input type="text" id="ports" name="ports" placeholder="80,443" value="{{.PortsFormVal}}">
+		<br>
+		<br>
+		<input type="submit" value="Submit">
+	</form>
+
+	<ul>
+		{{range .PortScanResults}}
+			{{if .Open}}
+				<li class="open">{{.Port}} - Open</li>
+			{{else}}
+				<li class="closed">{{.Port}} - Closed</li>
+			{{end}}
+		{{end}}
+	</ul>
+	<br>
+	<div class="footer">
+		<a href="https://github.com/mtzfederico/">Source</a>
+	</div>
+	</body>
+</html>

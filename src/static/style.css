@@ -1,27 +1,195 @@
-/* Light mode */
-@media (prefers-color-scheme: light) {
-    body {
-        background-color: white;
-        color: black;
-        /*font-family:  'Consolas', 'Lexend Deca', 'Ubuntu Mono';
-        font-size: 24px;*/
-    }
+:root {
+    color-scheme: light dark;
 }
 
-/* Dark mode */
+body { margin: 0; padding: 0; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+table, td { border-collapse:collapse; }
+img { border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; }
+p { display: block; margin: 13px 0; }
+
+ul {
+  list-style-type: none;
+  margin: 15px auto 0;
+  padding: 0;
+  list-style: none;
+  display: table;
+  width: 600px;
+  text-align: center;
+}
+
+li {
+  display: table-cell;
+  position: relative;
+  padding: 15px 0;
+}
+
+a {
+  color: #1EB0F4;
+  text-transform: uppercase;
+  text-decoration: none;
+  letter-spacing: 0.15em;
+
+  display: inline-block;
+  padding: 12px 20px 15px;
+  position: relative;
+}
+
+a:after {
+  background: none repeat scroll 0 0 transparent;
+  bottom: 0;
+  content: "";
+  display: block;
+  height: 2px;
+  left: 50%;
+  position: absolute;
+  background: red;
+  transition: width 0.3s ease 0s, left 0.3s ease 0s;
+  width: 0;
+}
+
+a:hover:after {
+  width: 100%;
+  left: 0;
+}
+
+@media screen and (max-height: 300px) {
+	ul {
+		margin-top: 40px;
+	}
+}
+
+@media (prefers-color-scheme: light) {
+  body {background-color: #f0f0f0;}
+
+  .actualBOX {background:#ffffff;}
+
+  .boxShadow {
+    box-shadow:0px 2px 50px rgba(0,0,0,0.1);}
+
+  .footer {color: #4F545C;}
+}
+
 @media (prefers-color-scheme: dark) {
-    body {
-        background-color: black;
-        color: white;
-        /*font-family:  'Consolas', 'Lexend Deca', 'Ubuntu Mono';
-        font-size: 24px;*/
-    }
+  body {background-color: #696969;}
+
+  .actualBOX {background: #e8e8e8;}
+
+  .boxShadow {box-shadow:0px 2px 50px rgba(255,255,255,0.1);}
+
+  .footer {color: #D0D0D0;}
+}
+
+.actualBOX {
+  font-size:0px;
+  width:100%;
+}
+
+.boxShadow {
+  max-width:640px;
+  margin:0 auto;
+  border-radius:15px;
+  overflow:visible;
+}
+
+.footer {
+  font-family: Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;
+  font-weight: 250;
+  font-size: 16px;
+  letter-spacing: 0.27px;
+  text-align: center;
+  position: fixed;
+  left: 0;
+  bottom: 10;
+  width: 100%;
+  height: 28px;
+  padding-bottom: max(12px, env(safe-area-inset-bottom));
+}
+
+h1 {
+  font-family: Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;
+  font-weight: 500;
+  font-size: 30px;
+  color: #4F545C;
+  letter-spacing: 0.27px;
+  text-align: center;
+}
+
+h2 {
+  font-family: Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;
+  font-weight: 250;
+  font-size: 20px;
+  color: #4F545C;
+  letter-spacing: 0.27px;
+  text-align: center;
+}
+
+h3 {
+  font-family: Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;
+  font-weight: 125;
+  font-size: 18px;
+  color: #4F545C;
+  letter-spacing: 0.27px;
+  text-align: center;
+}
+
+.table1 {
+  font-size:0px;
+  width:100%;
+  background:transparent;
+}
+
+.arroundTable {
+  margin:0px auto;
+  max-width:640px;
+  background:transparent;
 }
 
 /* The alert message box */
 .alert {
     padding: 20px;
+    font-size: 15px;
     background-color: #f44336; /* Red */
     color: white;
     margin-bottom: 15px;
+  }
+
+  input[type=text] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  
+  input[type=submit] {
+    width: 100%;
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  input[type=submit]:hover {
+    background-color: #45a049;
+  }
+
+  ul.ports {
+    list-style-type: none;
+    margin: 15px auto 0 80px;
+    list-style: none;
+    display: table;
+    width: 400px;
+    text-align: center;
+  }
+  
+  ul.ports li {
+    background: #cce5ff;
+    margin: 5px;
+    border-radius: 5px;
+    height: 20px;
   }

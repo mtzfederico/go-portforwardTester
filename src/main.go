@@ -16,24 +16,15 @@ type PortScanResult struct {
 	Open bool
 }
 
-/*
 func getRoot(c *gin.Context) {
-	acceptEncoding := c.Request.Header.Get("Accept")
-	// fmt.Println("Accept: ", acceptEncoding)
-	if acceptEncoding == "application/json" {
-		// fmt.Println("Accept header is JSON")
-		c.JSON(http.StatusOK, gin.H{"message": "Port Forward Tester Built in GO"})
-	} else {
-		c.HTML(http.StatusOK, "index.tmpl", gin.H{
-			"title": "",
-		})
-	}
-}*/
+	c.HTML(http.StatusOK, "index.tmpl", gin.H{"ClientIP": c.ClientIP()})
+}
 
 func handleCheckPorts(c *gin.Context) {
 	host := c.PostForm("host")
+	host = strings.ReplaceAll(host, " ", "")
 	portsFormVal := c.PostForm("ports")
-	// c.String(http.StatusOK, "host: %s, ports: %s", host, ports)
+	portsFormVal = strings.ReplaceAll(portsFormVal, " ", "")
 
 	errorMessage := ""
 
@@ -54,9 +45,7 @@ func handleCheckPorts(c *gin.Context) {
 			timeout := time.Second
 			conn, err := net.DialTimeout("tcp", net.JoinHostPort(host, port), timeout)
 			if err != nil {
-				fmt.Println("Connecting error:", err)
-				errorMessage = err.Error()
-				break
+				// fmt.Println("Connection error: ", err)
 			}
 			portAsInt, err := strconv.Atoi(port)
 			if err != nil {
@@ -75,23 +64,24 @@ func handleCheckPorts(c *gin.Context) {
 	}
 
 	acceptEncoding := c.Request.Header.Get("Accept")
-	// fmt.Println("Accept: ", acceptEncoding)
 	if acceptEncoding == "application/json" {
-		c.JSON(http.StatusOK, gin.H{"results": results})
+		c.JSON(http.StatusOK, gin.H{"host": host, "results": results})
 	} else {
+		clientIP := c.ClientIP()
 		c.HTML(http.StatusOK, "result.tmpl", gin.H{
+			"ClientIP":        clientIP,
 			"Host":            host,
 			"PortsFormVal":    portsFormVal,
 			"ErrorMessage":    errorMessage,
 			"PortScanResults": results,
 		})
 	}
-
-	// c.JSON(200, gin.H{"results": results})
-	// {"results": [{"port":22,"status":"closed"},{"port":80,"status":"open"},{"port":443,"status":"open"}]}
 }
 
 func main() {
+	gin.SetMode(gin.ReleaseMode)
+
+	fmt.Println("Starting server")
 	router := gin.Default()
 	// https://pkg.go.dev/github.com/gin-gonic/gin#section-readme
 	// srouter.SetTrustedProxies([]string{"127.0.0.1"})
@@ -99,12 +89,12 @@ func main() {
 
 	router.LoadHTMLGlob("templates/*.tmpl")
 
-	// router.GET("/", getRoot)
-	router.StaticFile("/", "static/index.html")
 	router.StaticFile("/style.css", "static/style.css")
+	router.GET("/", getRoot)
 	router.POST("/", handleCheckPorts)
 
-	router.Run("localhost:8080")
+	fmt.Println("Listening on port 8080")
+	router.Run(":8080")
 }
 
 // Take a look at your page's HTML
