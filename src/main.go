@@ -96,6 +96,3 @@ func main() {
 	fmt.Println("Listening on port 8080")
 	router.Run(":8080")
 }
-
-// Take a look at your page's HTML
-// specially for a footer
