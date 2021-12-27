@@ -71,6 +71,14 @@
 						</ul>
 					{{end}}
 				{{end}}
+
+        {{if .ErrorMessage}}
+        <ul class="ports">
+          <div class="alert">
+            <strong>Error:</strong> {{.ErrorMessage}}
+          </div>
+        </ul>        
+	      {{end}}
 			</td>
 		</tr>
 	</tbody>

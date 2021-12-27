@@ -16,8 +16,30 @@ type PortScanResult struct {
 	Open bool
 }
 
+func checkPort(host string, port string) (result PortScanResult) {
+	timeout := time.Second
+	hostWithPort := net.JoinHostPort(host, port)
+	conn, err := net.DialTimeout("tcp", hostWithPort, timeout)
+	if err != nil {
+		// fmt.Println("Connection error: ", err)
+	}
+	portAsInt, err := strconv.Atoi(port)
+	if err != nil {
+		fmt.Println("Atoi error: ", err)
+	}
+
+	if conn != nil {
+		defer conn.Close()
+		fmt.Println("Opened", hostWithPort)
+
+		return PortScanResult{portAsInt, true}
+	} else {
+		return PortScanResult{portAsInt, false}
+	}
+}
+
 func getRoot(c *gin.Context) {
-	c.HTML(http.StatusOK, "index.tmpl", gin.H{"ClientIP": c.ClientIP()})
+	c.HTML(http.StatusOK, "index.html", gin.H{"ClientIP": c.ClientIP()})
 }
 
 func handleCheckPorts(c *gin.Context) {
@@ -42,33 +64,41 @@ func handleCheckPorts(c *gin.Context) {
 
 	if errorMessage == "" {
 		for _, port := range ports {
-			timeout := time.Second
-			conn, err := net.DialTimeout("tcp", net.JoinHostPort(host, port), timeout)
-			if err != nil {
-				// fmt.Println("Connection error: ", err)
-			}
-			portAsInt, err := strconv.Atoi(port)
-			if err != nil {
-				fmt.Println("Atoi error: ", err)
+			// chcek if it is a port range (8880-8888)
+			if strings.Contains(port, "-") {
+				portRange := strings.Split(port, "-")
+				min, _ := strconv.Atoi(portRange[0])
+				max, _ := strconv.Atoi(portRange[1])
+
+				if (max-min)+1 > 30 {
+					errorMessage = "The range is too big. (Max 30)"
+					continue
+				}
+
+				if max < min {
+					errorMessage = "The start value is smaller than the end value"
+					continue
+				}
+
+				for portInRange := min; portInRange <= max; portInRange++ {
+					portInRangeAsString := strconv.Itoa(portInRange)
+					result := checkPort(host, portInRangeAsString)
+					results = append(results, result)
+				}
+				continue
 			}
 
-			if conn != nil {
-				defer conn.Close()
-				fmt.Println("Opened", net.JoinHostPort(host, port))
-
-				results = append(results, PortScanResult{portAsInt, true})
-			} else {
-				results = append(results, PortScanResult{portAsInt, false})
-			}
+			result := checkPort(host, port)
+			results = append(results, result)
 		}
 	}
 
 	acceptEncoding := c.Request.Header.Get("Accept")
 	if acceptEncoding == "application/json" {
-		c.JSON(http.StatusOK, gin.H{"host": host, "results": results})
+		c.JSON(http.StatusOK, gin.H{"host": host, "error": errorMessage, "results": results})
 	} else {
 		clientIP := c.ClientIP()
-		c.HTML(http.StatusOK, "result.tmpl", gin.H{
+		c.HTML(http.StatusOK, "result.html", gin.H{
 			"ClientIP":        clientIP,
 			"Host":            host,
 			"PortsFormVal":    portsFormVal,
@@ -87,7 +117,7 @@ func main() {
 	// srouter.SetTrustedProxies([]string{"127.0.0.1"})
 	// router.TrustedPlatform = "X-CDN-IP"
 
-	router.LoadHTMLGlob("templates/*.tmpl")
+	router.LoadHTMLGlob("templates/*.html")
 
 	router.StaticFile("/style.css", "static/style.css")
 	router.GET("/", getRoot)
