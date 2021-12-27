@@ -76,7 +76,7 @@ func handleCheckPorts(c *gin.Context) {
 				}
 
 				if max < min {
-					errorMessage = "The start value is smaller than the end value"
+					errorMessage = "The range start value is smaller than the end value"
 					continue
 				}
 
