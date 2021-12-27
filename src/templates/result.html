@@ -63,11 +63,11 @@
 				{{range .PortScanResults}}
 					{{if .Open}}
 						<ul class="ports">
-							<li class="open">{{.Port}} - Open</li>
+							<li>{{.Port}} - <strong style="color:Green;">Open</strong></li>
 						</ul>
 					{{else}}
 						<ul class="ports">
-							<li class="closed">{{.Port}} - Closed</li>
+							<li>{{.Port}} - <strong style="color:Red;">Closed</strong></li>
 						</ul>
 					{{end}}
 				{{end}}
